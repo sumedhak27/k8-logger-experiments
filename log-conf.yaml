@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: log-config
+data:
+  log-config.yaml: |
+    log_dir: "/share/var/log/cortx/"
+    log_level: "INFO"

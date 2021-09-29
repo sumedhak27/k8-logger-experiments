@@ -1,0 +1,3 @@
+log_config:
+  log_path: /var/log/cortx/component
+  log_level: INFO

@@ -1,0 +1,21 @@
+FROM centos:7.9.2009
+
+RUN yum install -y python3 crontabs logrotate
+
+RUN pip3 install pyyaml
+
+RUN mkdir -p /opt/cortx/component/
+
+COPY ./logger.py ./log_rollover.conf ./component_config.yaml ./run_on_start.sh /opt/cortx/component/
+
+RUN chmod 0644 /opt/cortx/component/log_rollover.conf
+
+COPY ./cron_entries /etc/cron.d/cron_entries
+
+RUN chmod 0644 /etc/cron.d/cron_entries
+
+RUN sed -i '/session    required   pam_loginuid.so/c\#session    required   pam_loginuid.so' /etc/pam.d/crond
+
+RUN crontab /etc/cron.d/cron_entries
+
+CMD ["/bin/bash", "/opt/cortx/component/run_on_start.sh"]

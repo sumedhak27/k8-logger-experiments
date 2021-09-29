@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: motr
+  labels:
+    app: logger
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: logger
+  template:
+    metadata:
+      labels:
+        app: logger
+    spec:
+      volumes:
+      # - name: logger-local-storage
+      #   persistentVolumeClaim:
+      #     claimName: logger-local-pvc
+      - name: logger-shared-storage
+        persistentVolumeClaim:
+          claimName: logger-shared-pvc
+      containers:
+      - name: motr
+        image: demo-logger:1.3
+        env:
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: POD_NAME
+          value: "motr"
+        - name: LOG_DIR
+          value: "/var/log/cortx/"
+        - name: PER_NODE_DIR
+          value: "False"
+        volumeMounts:
+        - name: logger-shared-storage
+          mountPath: "/var/log/cortx/"
+        # - name: logger-local-storage
+        #   mountPath: "/var/log/cortx/"

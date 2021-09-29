@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: log-rotator
+  labels:
+    app: logger
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: logger
+  template:
+    metadata:
+      labels:
+        app: logger
+    spec:
+      volumes:
+        - name: logger-storage
+          persistentVolumeClaim:
+            claimName: logger-pv-claim
+      containers:
+        - name: log-rotator
+          image: log-rotator:1.0
+          volumeMounts:
+            - name: logger-storage
+              mountPath: "/var/log/demoLogger"

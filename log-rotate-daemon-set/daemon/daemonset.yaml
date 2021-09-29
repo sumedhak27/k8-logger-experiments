@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: log-rotate-daemonset
+  labels:
+    app: logger
+spec:
+  selector:
+    matchLabels:
+      app: logger
+  template:
+    metadata:
+      labels:
+        app: logger
+    spec:
+      volumes:
+      # - name: logger-local-storage
+      #   persistentVolumeClaim:
+      #     claimName: logger-local-pvc
+      - name: logger-shared-storage
+        persistentVolumeClaim:
+          claimName: logger-shared-pvc
+      - name: logrotate-conf
+        configMap:
+          name: logrotate-config
+      containers:
+      - name: log-rotate-daemon
+        image: log-rotate-daemon:1.0
+        volumeMounts:
+        # - name: logger-local-storage
+        #   mountPath: "/var/log/cortx"
+        - name: logger-shared-storage
+          mountPath: "/var/log/cortx/motr/"
+        - name: logrotate-conf
+          mountPath: /etc/logrotate.d

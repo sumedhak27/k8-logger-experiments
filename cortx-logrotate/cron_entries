@@ -1,0 +1,1 @@
+*/2 * * * * /usr/sbin/logrotate -f /opt/cortx/component/log_rollover.conf

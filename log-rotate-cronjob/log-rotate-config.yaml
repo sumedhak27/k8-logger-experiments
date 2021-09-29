@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: logrotate-config
+data:
+  demo-logger: |
+    /var/log/cortx/**/*.log {
+      create 0644 root
+      missingok
+      rotate 4
+      # compress
+      notifempty
+      copytruncate
+      size 1k
+    }
+
+    # /var/log/cortx/s3/*.log {
+    #   create 0644 root
+    #   missingok
+    #   rotate 4
+    #   compress
+    #   notifempty
+    #   copytruncate
+    #   size 1k
+    # }
+
+    # /var/log/cortx/utils/**/*.log {
+    #   rotate 5
+    #   size 5M
+    # }
+
+    # /var/log/cortx/hare/*.log {
+    #   rotate 10
+    #   maxsize 50M
+    #   weekly
+    #   compress
+    #   missingok
+    #   copytruncate
+    # }
+
+    # /var/log/seagate/csm/*.log {
+    #     rotate 3
+    #     size 10M
+    #     compress
+    #     postrotate
+    #         /bin/kill -HUP `cat /var/run/syslogd.pid 2> /dev/null` 2> /dev/null || true
+    #     endscript
+    # } 

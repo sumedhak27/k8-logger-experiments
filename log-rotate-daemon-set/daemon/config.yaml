@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: logrotate-config
+data:
+  demo-logger: |
+    /var/log/cortx/**/*.log {
+        create 0644 root
+        missingok
+        rotate 10
+        # compress
+        notifempty
+        copytruncate
+        size 1k
+    }

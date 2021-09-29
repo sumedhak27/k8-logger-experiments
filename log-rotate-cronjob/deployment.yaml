@@ -1,0 +1,33 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: log-rotate-cronjob
+  labels:
+    app: logger
+spec:
+  schedule: "*/1 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          volumes:
+          # - name: logger-local-storage
+          #   persistentVolumeClaim:
+          #     claimName: logger-local-pvc
+          - name: logger-shared-storage
+            persistentVolumeClaim:
+              claimName: logger-shared-pvc
+          - name: logrotate-conf
+            configMap:
+              name: logrotate-config
+          containers:
+          - name: log-rotator
+            image: log-rotate-cronjob:1.1
+            volumeMounts:
+            # - name: logger-local-storage
+            #   mountPath: "/var/log/cortx"
+            - name: logger-shared-storage
+              mountPath: "/var/log/cortx/"
+            - name: logrotate-conf
+              mountPath: /etc/logrotate.d
+          restartPolicy: OnFailure
