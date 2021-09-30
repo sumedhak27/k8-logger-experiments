@@ -1,0 +1,9 @@
+FROM centos:7.9.2009
+
+RUN yum install -y python3 && pip3 install pyyaml
+
+RUN mkdir -p /opt/cortx/component/
+
+COPY ./logrotate-python/logger.py ./component_config.yaml /opt/cortx/component/
+
+CMD ["/usr/bin/python3", "/opt/cortx/component/logger.py"]
