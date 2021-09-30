@@ -5,7 +5,7 @@ metadata:
   labels:
     app: logger-with-rotator
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: logger-with-rotator
@@ -23,7 +23,7 @@ spec:
       #     claimName: logger-shared-pvc
       containers:
       - name: motr  
-        image: component-logger:1.0
+        image: component-logger:1.2
         volumeMounts:
         # - name: logger-shared-storage
         #   mountPath: "/var/log/cortx/"

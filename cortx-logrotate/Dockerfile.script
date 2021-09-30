@@ -1,16 +1,16 @@
 FROM centos:7.9.2009
 
-RUN yum install -y python3 crontabs logrotate
+RUN yum install -y python3 crontabs
 
 RUN pip3 install pyyaml
 
 RUN mkdir -p /opt/cortx/component/
 
-COPY ./logger.py ./log_rollover.conf ./component_config.yaml ./run_on_start.sh /opt/cortx/component/
+COPY ./logrotate-script/logger.py ./logrotate-script/log_rollover.py ./component_config.yaml ./run_on_start.sh /opt/cortx/component/
 
-RUN chmod 0644 /opt/cortx/component/log_rollover.conf
+RUN chmod 0644 /opt/cortx/component/log_rollover.py
 
-COPY ./cron_entries /etc/cron.d/cron_entries
+COPY ./logrotate-script/cron_entries /etc/cron.d/cron_entries
 
 RUN chmod 0644 /etc/cron.d/cron_entries
 
