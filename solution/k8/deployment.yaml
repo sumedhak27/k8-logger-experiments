@@ -29,5 +29,3 @@ spec:
         #   mountPath: "/var/log/cortx/"
         - name: logger-local-storage
           mountPath: "/var/log/cortx/"
-      nodeSelector:
-        disktype: ssd

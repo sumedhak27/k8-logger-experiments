@@ -3,6 +3,7 @@
 import argparse
 import sys
 # from cortx.utils.conf_store import Conf
+# NOTE: used pyyaml since cortx-utils is not installed on the container
 import yaml
 import shutil
 import os
@@ -12,7 +13,7 @@ def get_local(config_url):
     # Conf.load('Config', config_url)
     # return Conf.get('Config', 'cortx>common>storage>log')
 
-    # for testing on container where cortx.utils is not installed.
+    # NOTE: using pyyaml since cortx.utils is not installed.
     log_dir = None
     with open(config_url) as f:
         conf = yaml.load(f, Loader=yaml.loader.SafeLoader)
@@ -25,7 +26,6 @@ def setup_logrotate_job(local):
         "/opt/cortx/component/logrotate/config/log_rollover.conf"
     component_logpath = "component"
     log_path = os.path.join(local, component_logpath)
-    print(log_path, " => from setup_logrotate_job()")
     update_log_dir(rotate_conf_file, log_path)
     shutil.move(rotate_conf_file, "/etc/logrotate.d/")
     shutil.move("/etc/cron.daily/logrotate", "/etc/cron.hourly/")

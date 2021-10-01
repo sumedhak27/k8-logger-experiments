@@ -4,6 +4,8 @@ import argparse
 import sys
 # from cortx.utils.conf_store import Conf
 # from cortx.utils.process import SimpleProcess
+# NOTE: used pyyaml and subprocess since cortx-utils is
+#       not installed on the container.
 import yaml
 import subprocess
 import os
@@ -13,7 +15,7 @@ def get_local(config_url):
     # Conf.load('Config', config_url)
     # return Conf.get('Config', 'cortx>common>storage>log')
 
-    # using pyyaml since cortx-utils is not installed on the container.
+    # NOTE: using pyyaml since cortx-utils is not installed on the container.
     log_dir = None
     with open(config_url) as f:
         conf = yaml.load(f, Loader=yaml.loader.SafeLoader)
@@ -37,7 +39,7 @@ def setup_cron_job(local):
     with open("/etc/cron.d/cron_entries", 'a') as f:
         f.write(f"{cron_shedule} {rollover_script_cmd} --logpath {log_dir}\n")
     # _, err, retcode = SimpleProcess("crontab /etc/cron.d/cron_entries").run()
-    # using run_command since cortx-utils is not installed on the container.
+    # NOTE: using run_command since cortx-utils is not installed on the container.
     _, err = run_command("crontab /etc/cron.d/cron_entries")
     if err:
         sys.stderr.write(err)
