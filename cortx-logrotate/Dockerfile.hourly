@@ -1,0 +1,18 @@
+#component-logger:1.4
+FROM centos:7.9.2009
+
+RUN yum install -y python3 crontabs logrotate
+
+RUN pip3 install pyyaml
+
+RUN mkdir -p /opt/cortx/component/
+
+COPY ./logrotate-hourly/logger.py ./component_config.yaml ./run_on_start.sh /opt/cortx/component/
+
+COPY ./logrotate-hourly/log_rollover.conf /etc/logrotate.d/
+
+RUN chmod 0644 /etc/logrotate.d/log_rollover.conf
+
+RUN mv /etc/cron.daily/logrotate /etc/cron.hourly/logrotate
+
+CMD ["/bin/bash", "/opt/cortx/component/run_on_start.sh"]
